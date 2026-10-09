@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stellar View — Catálogo Astronómico</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Fuente Orbitron/Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Orbitron:wght@500;700;900&display=swap"
+    rel="stylesheet">
+</head>
+
+<body>
+
+  <!-- Encabezado Principal -->
+  <header class="header">
+    <div class="header-container">
+      <div class="brand">
+        <span class="satellite-icon">🛰️</span>
+        <h1 class="logo-text">STELLAR <span class="accent">VIEW</span></h1>
+      </div>
+      <div class="status-badge" id="api-status">
+        <span class="status-dot pulsing"></span>
+        <span class="status-text">Conectando a ORBIT...</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Contenido Principal -->
+  <main class="main-content">
+    <section class="hero-section">
+      <h2 class="section-title">Objetos Astronómicos Registrados</h2>
+      <p class="section-subtitle">Sincronizado en tiempo real desde la API de ORBIT Core.</p>
+    </section>
+
+    <!-- Error Banner (Oculto por defecto) -->
+    <div id="error-banner" class="error-banner hidden">
+      <span class="error-icon">⚠️</span>
+      <p id="error-message">No se pudo establecer conexión con el backend de ORBIT.</p>
+    </div>
+
+    <!-- Galería Grid -->
+    <section id="objects-grid" class="objects-grid">
+      <div class="card skeleton"></div>
+      <div class="card skeleton"></div>
+      <div class="card skeleton"></div>
+    </section>
+
+    <!-- Sección de Astrofotografía y Artículos -->
+    <section id="publications-section" class="container">
+      <h2>Artículos y publicaciones</h2>
+      <div id="publications-grid" class="grid-container" aria-live="polite">
+        <p>Cargando publicaciones…</p>
+      </div>
+    </section>
+
+    <section id="gallery-section" class="container">
+      <h2>📸 Astrofotografía y Artículos</h2>
+      <div id="gallery-grid" class="grid-container">
+        <!-- Tus publicaciones se cargarán dinámicamente aquí -->
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+
+</body>
+
+</html>

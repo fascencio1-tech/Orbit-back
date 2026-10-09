@@ -1,17 +1,12 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const sqlite3 = require('sqlite3').verbose();
 const { createClient } = require('@libsql/client');
 const path = require('path');
 
 
 const app = express();
 const PORT = process.env.PORT || 3002;
-const db = new sqlite3.Database(path.join(__dirname, 'database.db'), (err) => {
-    if (err) console.error('Error al conectar con SQLite:', err.message);
-    else console.log('ORBIT DB conectada correctamente.');
-});
 
 
 app.use(cors());

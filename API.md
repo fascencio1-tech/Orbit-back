@@ -12,8 +12,12 @@ La página consumidora solicita los datos al servidor de ORBIT por HTTP. No debe
 | `GET /api/publications?category=...` | Publicaciones de una categoría exacta |
 | `GET /api/gallery` | `{ data: [...] }` con fotos de la galería |
 | `GET /api/photos` | Alias de `/api/gallery` |
+| `POST /api/gallery` | Guarda una fotografía compartida en Turso |
+| `GET /api/gallery/:id/image` | Entrega los bytes de una fotografía guardada |
 
 Cada publicación incluye `id`, `title`, `content`, `image_url`, `category`, `author` y `created_at`. Las fotos incluyen `id`, `title`, `object_name`, `image_url`, `equipment` y `created_at`.
+
+La subida acepta JSON con `title`, `object_name`, `author`, `equipment` e `image`. `image` debe ser un Data URL en formato JPG, PNG, WEBP o GIF y pesar hasta 5 MB. La API guarda los bytes en la tabla `gallery` de Turso; prepara las columnas `image_data` y `author` al iniciar. Las fotografías nuevas se sirven desde `/api/gallery/:id/image` y quedan disponibles para todas las páginas que consulten esta API.
 
 ## Ejemplo para la página consumidora
 

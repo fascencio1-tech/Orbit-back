@@ -5,6 +5,7 @@ getApiStatus();
 getObjects();
 getPublications();
 getPhotos();
+setupGalleryUpload();
 
 function updateStatusVisualState(isOnline) {
     const statusEl = document.getElementById('api-status');
@@ -126,7 +127,7 @@ async function getPhotos() {
             const card = document.createElement('article');
             card.className = 'card photo-card';
             const image = document.createElement('img');
-            image.src = item.image_url;
+            image.src = item.image_url?.startsWith('/') ? new URL(item.image_url, URL).href : item.image_url;
             image.alt = item.title || 'Fotografía astronómica';
             image.loading = 'lazy';
             const content = document.createElement('div');
@@ -137,7 +138,10 @@ async function getPhotos() {
             object.textContent = `Objeto: ${item.object_name || 'N/A'}`;
             const equipment = document.createElement('small');
             equipment.textContent = item.equipment || '';
-            content.append(title, object, equipment);
+            const author = document.createElement('small');
+            author.className = 'photo-author';
+            author.textContent = item.author ? `Compartida por ${item.author}` : '';
+            content.append(title, object, equipment, author);
             card.append(image, content);
             galleryGrid.appendChild(card);
         });
@@ -145,4 +149,52 @@ async function getPhotos() {
         console.error('Error al cargar la galería:', error);
         galleryGrid.textContent = 'No se pudo cargar la galería de fotografías.';
     }
+}
+
+function setupGalleryUpload() {
+    const form = document.getElementById('gallery-upload-form');
+    if (!form) return;
+    form.addEventListener('submit', async event => {
+        event.preventDefault();
+        const status = document.getElementById('gallery-upload-status');
+        const button = form.querySelector('button[type="submit"]');
+        const fields = new FormData(form);
+        const file = fields.get('image');
+        if (!file || !file.size) return;
+        if (file.size > 5 * 1024 * 1024) {
+            status.textContent = 'La imagen debe pesar máximo 5 MB.';
+            return;
+        }
+        button.disabled = true;
+        status.textContent = 'Subiendo fotografía…';
+        try {
+            const image = await new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = () => reject(new Error('No se pudo leer el archivo'));
+                reader.readAsDataURL(file);
+            });
+            const response = await fetch(`${URL}/gallery`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    title: fields.get('title'),
+                    object_name: fields.get('object_name'),
+                    author: fields.get('author'),
+                    equipment: fields.get('equipment'),
+                    image,
+                }),
+            });
+            const result = await response.json();
+            if (!response.ok) throw new Error(result.error || `HTTP ${response.status}`);
+            form.reset();
+            status.textContent = 'Fotografía compartida con la comunidad.';
+            await getPhotos();
+        } catch (error) {
+            console.error('Error al subir fotografía:', error);
+            status.textContent = error.message || 'No se pudo subir la fotografía.';
+        } finally {
+            button.disabled = false;
+        }
+    });
 }

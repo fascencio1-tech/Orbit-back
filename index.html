@@ -59,9 +59,21 @@
     </section>
 
     <section id="gallery-section" class="container">
-      <h2>📸 Astrofotografía y Artículos</h2>
+      <h2>📸 Galería de astrofotografía</h2>
+      <form id="gallery-upload-form" class="gallery-form">
+        <h3>Comparte una fotografía</h3>
+        <div class="gallery-form-fields">
+          <label>Título *<input name="title" maxlength="120" required placeholder="Ej. Nebulosa de Orión"></label>
+          <label>Objeto astronómico<input name="object_name" maxlength="120" placeholder="Ej. M42"></label>
+          <label>Autor<input name="author" maxlength="120" placeholder="Tu nombre"></label>
+          <label>Equipo utilizado<input name="equipment" maxlength="200" placeholder="Telescopio, cámara…"></label>
+          <label class="gallery-file">Fotografía * (JPG, PNG, WEBP o GIF; máximo 5 MB)<input name="image" type="file" accept="image/jpeg,image/png,image/webp,image/gif" required></label>
+        </div>
+        <button type="submit">Subir fotografía</button>
+        <p id="gallery-upload-status" class="upload-status" role="status" aria-live="polite"></p>
+      </form>
       <div id="gallery-grid" class="grid-container">
-        <!-- Tus publicaciones se cargarán dinámicamente aquí -->
+        <!-- Las fotografías compartidas se cargan desde ORBIT -->
       </div>
     </section>
   </main>
